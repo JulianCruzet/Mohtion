@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(docker:*)",
+      "Bash(docker compose:*)",
+      "Bash(pip install:*)",
+      "Bash(python -m uvicorn:*)",
+      "Bash(timeout /t 3)",
+      "Bash(curl:*)",
+      "Bash(python:*)",
+      "Bash(findstr:*)",
+      "Bash(pytest:*)"
+    ]
+  }
+}
