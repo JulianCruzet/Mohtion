@@ -4,28 +4,18 @@ import { motion } from "framer-motion";
 import { TerminalDemo } from "./TerminalDemo";
 import { ArrowRight, Terminal } from "lucide-react";
 
-// Grid Beam Component
-const GridPattern = () => {
-    return (
-        <div className="absolute inset-0 z-0 h-full w-full bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] bg-zinc-50">
-            {/* Horizontal Lines */}
-            <div className="absolute h-full w-full bg-[linear-gradient(to_right,#e5e7eb_1px,transparent_1px)] opacity-[0.5]" />
-            {/* Vertical Lines */}
-            <div className="absolute h-full w-full bg-[linear-gradient(to_bottom,#e5e7eb_1px,transparent_1px)] opacity-[0.5]" />
-        </div>
-    )
-}
-
 export function Hero() {
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center justify-center bg-zinc-50 overflow-hidden pt-20">
+    <section className="relative min-h-[90vh] flex flex-col items-center justify-center bg-white overflow-hidden pt-20">
       
-      {/* Enhanced Background */}
-      <GridPattern />
-      
-      {/* Aurora Effect */}
-      <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-orange-200/40 rounded-full blur-[100px] opacity-60 z-0 pointer-events-none mix-blend-multiply" />
-      <div className="absolute top-[10%] left-[40%] w-[400px] h-[300px] bg-blue-200/40 rounded-full blur-[100px] opacity-60 z-0 pointer-events-none mix-blend-multiply" />
+      {/* 1. Base Grid Pattern (Subtle) */}
+      <div className="absolute inset-0 z-0 w-full h-full bg-white bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
+
+      {/* 2. Top-Right Aurora (Orange) */}
+      <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-orange-200/50 blur-[80px] z-0 pointer-events-none" />
+
+      {/* 3. Bottom-Left Aurora (Blue) */}
+      <div className="absolute bottom-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full bg-blue-100/50 blur-[80px] z-0 pointer-events-none" />
 
       <div className="relative z-10 container px-6 mx-auto flex flex-col items-center text-center">
         
