@@ -1,4 +1,5 @@
 import { TracingBeam } from "@/components/ui/tracing-beam";
+import { GlowingCard } from "@/components/ui/glowing-card";
 import { motion } from "framer-motion";
 import { Code, GitMerge, Search, ShieldCheck } from "lucide-react";
 
@@ -31,7 +32,7 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="py-24 bg-zinc-50 relative overflow-hidden">
+    <section className="py-24 bg-zinc-50 relative overflow-hidden" id="how-it-works">
         <div className="container mx-auto px-6 mb-12 text-center">
             <h2 className="text-3xl font-bold text-zinc-900 tracking-tight">
                 The Lifecycle
@@ -52,15 +53,15 @@ export function HowItWorks() {
                     </h2>
                 </div>
 
-              <div className="p-6 bg-white rounded-xl border border-zinc-200 shadow-sm hover:shadow-md transition-shadow">
+              <GlowingCard className="p-6">
                 {/* Icon */}
                 <div className="w-10 h-10 bg-zinc-100 rounded-lg flex items-center justify-center mb-4">
                     <item.icon className="w-5 h-5 text-zinc-600" />
                 </div>
-                <div className="text-sm prose prose-sm dark:prose-invert text-zinc-500">
+                <div className="text-sm prose prose-sm dark:prose-invert text-zinc-500 leading-relaxed font-medium">
                   {item.desc}
                 </div>
-              </div>
+              </GlowingCard>
             </div>
           ))}
         </div>
