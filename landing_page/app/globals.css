@@ -1,15 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  /* Abyssal Theme Variables */
-  --background: #020617; /* Slate-950 */
-  --foreground: #f8fafc; /* Slate-50 */
+  /* Ethereal Light Theme */
+  --background: #fafafa; /* Zinc-50 */
+  --foreground: #18181b; /* Zinc-900 */
   
-  --card: rgba(255, 255, 255, 0.03);
-  --card-border: rgba(255, 255, 255, 0.08);
+  --card: #ffffff;
+  --card-border: #e4e4e7; /* Zinc-200 */
   
-  --primary: #f8fafc;
-  --primary-foreground: #020617;
+  --primary: #18181b;
+  --primary-foreground: #ffffff;
+  
+  --accent: #f4f4f5; /* Zinc-100 */
 }
 
 body {
@@ -20,20 +22,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom Utilities */
-.glass {
-  background: rgba(2, 6, 23, 0.7);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--card-border);
-}
-
-.glow-text {
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-}
-
-.grid-bg {
-  background-image: linear-gradient(to right, #1e293b 1px, transparent 1px),
-    linear-gradient(to bottom, #1e293b 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(circle at center, black, transparent 80%);
+/* Dot Background Pattern */
+.bg-dot-black {
+  background-image: radial-gradient(#d4d4d8 1px, transparent 1px);
+  background-size: 24px 24px;
 }

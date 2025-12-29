@@ -6,12 +6,12 @@ import { Terminal, Check, X, GitPullRequest, Search, Zap } from "lucide-react";
 import clsx from "clsx";
 
 const LOGS = [
-  { type: "info", text: "Scanning repository...", icon: Search, color: "text-blue-400" },
-  { type: "success", text: "Found target: Complexity > 15 (auth.py)", icon: Zap, color: "text-amber-400" },
-  { type: "info", text: "Refactoring with Claude Sonnet...", icon: Terminal, color: "text-purple-400" },
-  { type: "info", text: "Verifying changes with pytest...", icon: Terminal, color: "text-slate-400" },
-  { type: "success", text: "Tests passed (142/142)!", icon: Check, color: "text-green-400" },
-  { type: "success", text: "PR Created: mohtion/bounty-8f2a", icon: GitPullRequest, color: "text-green-400" },
+  { type: "info", text: "Scanning repository...", icon: Search, color: "text-blue-500" },
+  { type: "success", text: "Found target: Complexity > 15 (auth.py)", icon: Zap, color: "text-orange-500" },
+  { type: "info", text: "Refactoring with Claude Sonnet...", icon: Terminal, color: "text-purple-500" },
+  { type: "info", text: "Verifying changes with pytest...", icon: Terminal, color: "text-zinc-500" },
+  { type: "success", text: "Tests passed (142/142)!", icon: Check, color: "text-emerald-500" },
+  { type: "success", text: "PR Created: mohtion/bounty-8f2a", icon: GitPullRequest, color: "text-emerald-500" },
 ];
 
 export function TerminalDemo() {
@@ -25,17 +25,17 @@ export function TerminalDemo() {
   }, []);
 
   return (
-    <div className="w-full max-w-lg mx-auto bg-slate-900 rounded-xl overflow-hidden border border-slate-800 shadow-2xl shadow-indigo-500/10">
-      {/* Window Controls */}
-      <div className="flex items-center gap-2 px-4 py-3 bg-slate-900 border-b border-slate-800">
-        <div className="w-3 h-3 rounded-full bg-red-500/20 border border-red-500/50" />
-        <div className="w-3 h-3 rounded-full bg-yellow-500/20 border border-yellow-500/50" />
-        <div className="w-3 h-3 rounded-full bg-green-500/20 border border-green-500/50" />
-        <div className="ml-2 text-xs font-mono text-slate-500">mohtion-worker — 85x24</div>
+    <div className="w-full mx-auto bg-white rounded-xl overflow-hidden border border-zinc-200 shadow-2xl shadow-zinc-200/50">
+      {/* Window Controls (macOS Light Mode) */}
+      <div className="flex items-center gap-2 px-4 py-3 bg-zinc-50 border-b border-zinc-200">
+        <div className="w-3 h-3 rounded-full bg-[#FF5F56] border border-[#E0443E]" />
+        <div className="w-3 h-3 rounded-full bg-[#FFBD2E] border border-[#DEA123]" />
+        <div className="w-3 h-3 rounded-full bg-[#27C93F] border border-[#1AAB29]" />
+        <div className="ml-2 text-xs font-mono text-zinc-400">mohtion-worker — 85x24</div>
       </div>
 
-      {/* Terminal Content */}
-      <div className="p-4 font-mono text-sm h-[280px] flex flex-col gap-3 bg-slate-950/50">
+      {/* Terminal Content (Light Mode Terminal) */}
+      <div className="p-6 font-mono text-sm h-[320px] flex flex-col gap-3 bg-white text-zinc-700">
         {LOGS.slice(0, lines + 1).map((log, i) => (
           <motion.div
             key={i}
@@ -44,7 +44,7 @@ export function TerminalDemo() {
             className="flex items-center gap-3"
           >
             <log.icon className={clsx("w-4 h-4", log.color)} />
-            <span className={clsx(log.type === "success" ? "text-slate-200" : "text-slate-400")}>
+            <span className={clsx("font-medium", log.type === "success" ? "text-zinc-800" : "text-zinc-600")}>
               {log.text}
             </span>
           </motion.div>
@@ -53,7 +53,7 @@ export function TerminalDemo() {
           <motion.div
             animate={{ opacity: [0, 1] }}
             transition={{ repeat: Infinity, duration: 0.8 }}
-            className="w-2 h-4 bg-indigo-500/50"
+            className="w-2 h-4 bg-zinc-400"
           />
         )}
       </div>

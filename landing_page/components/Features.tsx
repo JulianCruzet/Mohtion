@@ -1,81 +1,103 @@
 "use client";
 
+import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
+import { Code2, Shield, GitPullRequest, Zap } from "lucide-react";
 import { motion } from "framer-motion";
-import { Shield, Zap, GitPullRequest, Code2, RefreshCw, Lock } from "lucide-react";
 
-const features = [
+const Skeleton = ({ children }: { children?: React.ReactNode }) => (
+  <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-zinc-100 to-zinc-200 border border-zinc-100 overflow-hidden relative">
+    {children}
+    <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px]" />
+    <div className="relative z-10 w-full h-full p-4">{children}</div>
+  </div>
+);
+
+const items = [
   {
-    icon: Code2,
     title: "Deep AST Analysis",
-    description: "Mohtion doesn't just regex your code. It builds an Abstract Syntax Tree to understand cyclomatic complexity and structural debt.",
+    description: "Parsing your codebase into an Abstract Syntax Tree to identify cyclomatic complexity and structural debt.",
+    header: (
+      <Skeleton>
+        <div className="space-y-2 font-mono text-xs text-zinc-400">
+          <div className="bg-zinc-300 h-2 w-3/4 rounded" />
+          <div className="bg-zinc-300 h-2 w-1/2 rounded ml-4" />
+          <div className="bg-red-200 h-2 w-2/3 rounded ml-8" />
+          <div className="bg-zinc-300 h-2 w-1/2 rounded ml-4" />
+        </div>
+      </Skeleton>
+    ),
+    icon: <Code2 className="h-4 w-4 text-zinc-500" />,
+    className: "md:col-span-2",
   },
   {
-    icon: Zap,
+    title: "Safety Sandbox",
+    description: "Tests run in isolated ephemeral containers. No PR is ever created if the test suite fails.",
+    header: (
+      <Skeleton>
+        <div className="flex items-center justify-center h-full">
+          <Shield className="w-12 h-12 text-zinc-300" />
+        </div>
+      </Skeleton>
+    ),
+    icon: <Shield className="h-4 w-4 text-zinc-500" />,
+    className: "md:col-span-1",
+  },
+  {
     title: "Autonomous Refactoring",
-    description: "Powered by Claude 3.5 Sonnet, Mohtion rewrites complex functions while preserving their behavior and external API signatures.",
+    description: "Powered by Claude Sonnet, replacing brittle logic with robust, clean patterns.",
+    header: (
+      <Skeleton>
+         <div className="flex items-center gap-2 mb-2">
+            <div className="w-2 h-2 bg-red-400 rounded-full" />
+            <div className="h-1 w-12 bg-zinc-300 rounded" />
+         </div>
+         <div className="flex items-center gap-2">
+            <div className="w-2 h-2 bg-green-400 rounded-full" />
+            <div className="h-1 w-16 bg-zinc-300 rounded" />
+         </div>
+      </Skeleton>
+    ),
+    icon: <Zap className="h-4 w-4 text-zinc-500" />,
+    className: "md:col-span-1",
   },
   {
-    icon: Shield,
-    title: "Safety-First Architecture",
-    description: "We never open a PR if your tests fail. Mohtion runs your test suite in a sandboxed environment before committing.",
-  },
-  {
-    icon: RefreshCw,
-    title: "Self-Healing Agents",
-    description: "If a refactor breaks a test, Mohtion analyzes the error log, adjusts the code, and retries automatically (up to 2x).",
-  },
-  {
-    icon: GitPullRequest,
     title: "Native GitHub App",
-    description: "Installs directly on your repo. No complex CI/CD wiring required. Works via webhooks and background workers.",
-  },
-  {
-    icon: Lock,
-    title: "Zero-Trust Security",
-    description: "Your code is processed in ephemeral containers. Credentials are encrypted. We only touch the branches we create.",
+    description: "Zero config CI/CD. Installs as a bot on your repository and listens for webhooks.",
+    header: (
+        <Skeleton>
+            <div className="flex items-center justify-center h-full">
+                <GitPullRequest className="w-12 h-12 text-zinc-300" />
+            </div>
+        </Skeleton>
+    ),
+    icon: <GitPullRequest className="h-4 w-4 text-zinc-500" />,
+    className: "md:col-span-2",
   },
 ];
 
 export function Features() {
   return (
-    <section className="py-32 bg-slate-950 relative overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-indigo-500/10 blur-[100px] rounded-full" />
-
-      <div className="container px-6 mx-auto relative z-10">
-        <div className="text-center max-w-2xl mx-auto mb-20">
-          <h2 className="text-3xl md:text-5xl font-bold tracking-tighter text-white mb-6">
-            Technical Debt is <br />
-            <span className="text-indigo-400">No Longer Your Problem.</span>
-          </h2>
-          <p className="text-slate-400 text-lg">
-            Mohtion operates as a senior engineer on your team, handling the cleanup work you never have time for.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature, idx) => (
-            <motion.div
-              key={idx}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="group p-8 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-indigo-500/30 transition-all hover:bg-slate-900/80"
-            >
-              <div className="w-12 h-12 rounded-lg bg-indigo-500/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                <feature.icon className="w-6 h-6 text-indigo-400" />
-              </div>
-              <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-indigo-200 transition-colors">
-                {feature.title}
-              </h3>
-              <p className="text-slate-400 leading-relaxed">
-                {feature.description}
-              </p>
-            </motion.div>
-          ))}
-        </div>
+    <section className="py-24 bg-zinc-50 relative">
+      <div className="container mx-auto px-6 mb-12">
+        <h2 className="text-3xl font-bold text-zinc-900 mb-4 tracking-tight">
+          Engineered for <span className="text-orange-500">Autonomy</span>.
+        </h2>
+        <p className="text-zinc-500 max-w-2xl">
+          Mohtion is not a linter. It is an agent that acts on your behalf to clean up the mess you don't have time for.
+        </p>
       </div>
+      <BentoGrid className="max-w-6xl mx-auto px-6">
+        {items.map((item, i) => (
+          <BentoGridItem
+            key={i}
+            title={item.title}
+            description={item.description}
+            header={item.header}
+            icon={item.icon}
+            className={item.className}
+          />
+        ))}
+      </BentoGrid>
     </section>
   );
 }
