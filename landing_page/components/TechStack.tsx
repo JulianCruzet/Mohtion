@@ -16,7 +16,7 @@ export function TechStack() {
         <p className="text-center text-[10px] font-bold text-zinc-400 tracking-[0.2em] uppercase mb-8">
           Built with Industry Leading Tech
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-700">
+        <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 opacity-70 hover:opacity-100 transition-all duration-700">
           {techs.map((tech) => (
             <motion.div 
               key={tech.name} 
