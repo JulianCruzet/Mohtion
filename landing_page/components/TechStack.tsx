@@ -16,7 +16,7 @@ export function TechStack() {
         <p className="text-center text-[10px] font-bold text-zinc-800 tracking-[0.2em] uppercase mb-8">
           Built with Industry Leading Tech
         </p>
-        <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 opacity-70 hover:opacity-100 transition-all duration-700">
+        <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 transition-all duration-700">
           {techs.map((tech) => (
             <motion.div 
               key={tech.name} 
@@ -24,7 +24,7 @@ export function TechStack() {
               whileHover={{ y: -2 }}
             >
               <img src={tech.logo} alt={tech.name} className="h-6 w-auto object-contain" />
-              <span className="text-zinc-900 font-bold text-sm tracking-tight">{tech.name}</span>
+              <span className="text-zinc-950 font-bold text-sm tracking-tight">{tech.name}</span>
             </motion.div>
           ))}
         </div>
