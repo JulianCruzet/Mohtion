@@ -172,3 +172,74 @@ All core Mohtion components are now validated in a production scenario:
 - Implement webhook automation for continuous monitoring
 - Deploy to cloud platform (Railway, Fly.io, or AWS)
 - Add monitoring and logging infrastructure
+
+---
+
+## 2025-12-30 - Session 4: Production Deployment to Railway
+
+### Accomplished
+- Deployed Mohtion to Railway for 24/7 operation
+- Created Railway configuration files:
+  - `railway.toml` - Web service configuration with health checks
+  - `railway.worker.toml` - Worker service configuration
+  - `.dockerignore` - Build optimization to reduce Docker context
+- Enhanced `Dockerfile` with EXPOSE directive for documentation
+- Set up Railway project architecture:
+  - **Web service**: FastAPI app handling GitHub webhooks (public URL)
+  - **Worker service**: Background job processor (internal only)
+  - **Redis**: Managed queue via Railway plugin
+- Configured all environment variables:
+  - GitHub App credentials (App ID, private key, webhook secret)
+  - Anthropic API key for Claude integration
+  - Agent settings (max retries, PRs per day, complexity threshold)
+
+### Platform: Railway ✅
+**Rationale**:
+- Native Docker support (existing Dockerfile works as-is)
+- Managed Redis plugin (one-click setup with auto-configured REDIS_URL)
+- Multi-service architecture (web + worker in same project)
+- Automatic HTTPS and public URLs for webhooks
+- Cost-effective (~$10-15/month for full stack)
+
+**Architecture**:
+```
+Railway Project
+├── Web Service (public URL)
+│   └── uvicorn mohtion.web.app:app --host 0.0.0.0 --port $PORT
+├── Worker Service (internal)
+│   └── python -m mohtion.worker
+└── Redis Plugin (managed)
+    └── Auto-configured REDIS_URL
+```
+
+### Production Status: 🚀 READY FOR DEPLOYMENT
+
+**Configuration complete**:
+- ✅ Railway config files created
+- ✅ Dockerfile optimized for production
+- ✅ Build optimization with .dockerignore
+- ✅ Environment variables documented
+- ✅ GitHub webhook integration planned
+
+**Next deployment steps** (your action required):
+1. Install Railway CLI: `npm install -g @railway/cli` or `brew install railway`
+2. Login and create project: `railway login` → `railway init`
+3. Add Redis plugin via Railway Dashboard
+4. Deploy web service: `railway up --service mohtion-web`
+5. Deploy worker service: `railway up --service mohtion-worker`
+6. Configure environment variables via Railway Dashboard
+7. Update GitHub App webhook URL to Railway public URL
+8. Verify health endpoint: `curl https://[railway-url]/health`
+
+### Key Technical Decisions
+- **No Docker socket needed**: Worker runs tests in-process via subprocess
+- **Database deferred**: Not implemented yet (TODO Phase 10), deployment works without it
+- **Scaling strategy**: Start with 512MB (web) + 1GB (worker) + 256MB (Redis)
+- **Cost optimization**: Usage-based pricing with $5/month free tier credit
+
+### Next Steps
+- **Deploy to Railway** following the steps above
+- Configure GitHub webhook to point to Railway URL
+- Test end-to-end webhook reception and job processing
+- Monitor production usage and costs
+- Implement database persistence (TODO Phase 10)

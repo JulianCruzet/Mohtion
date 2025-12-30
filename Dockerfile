@@ -15,5 +15,8 @@ RUN pip install --no-cache-dir -e .
 # Copy application code
 COPY mohtion/ mohtion/
 
-# Default command (can be overridden in docker-compose)
+# Expose port for documentation
+EXPOSE 8000
+
+# Default command (overridden by railway.toml)
 CMD ["uvicorn", "mohtion.web.app:app", "--host", "0.0.0.0", "--port", "8000"]
