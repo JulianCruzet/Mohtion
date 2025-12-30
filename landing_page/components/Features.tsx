@@ -77,7 +77,8 @@ const items = [
 
 export function Features() {
   return (
-    <section className="py-24 bg-zinc-50 relative">
+    <section className="py-24 bg-white relative">
+      <div className="absolute top-0 left-0 right-0 h-24 bg-gradient-to-b from-zinc-100/50 to-transparent pointer-events-none" />
       <div className="container mx-auto px-6 mb-12">
         <h2 className="text-3xl font-bold text-zinc-900 mb-4 tracking-tight">
           Engineered for <span className="text-orange-500">Autonomy</span>.

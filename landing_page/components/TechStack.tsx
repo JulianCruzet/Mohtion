@@ -11,12 +11,10 @@ export function TechStack() {
   ];
 
   return (
-    <section className="py-12 bg-zinc-50 border-y border-zinc-100 relative overflow-hidden">
-      {/* Background Grid */}
-      <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] opacity-50" />
+    <section className="py-12 bg-zinc-900 border-y border-zinc-800 relative overflow-hidden">
       
       <div className="container mx-auto px-6 relative z-10">
-        <p className="text-center text-[10px] font-bold text-zinc-800 tracking-[0.2em] uppercase mb-8">
+        <p className="text-center text-[10px] font-bold text-zinc-400 tracking-[0.2em] uppercase mb-8">
           Built with Industry Leading Tech
         </p>
         <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 transition-all duration-700">
@@ -27,7 +25,7 @@ export function TechStack() {
               whileHover={{ y: -2 }}
             >
               <img src={tech.logo} alt={tech.name} className="h-6 w-auto object-contain" />
-              <span className="text-zinc-950 font-bold text-sm tracking-tight">{tech.name}</span>
+              <span className="text-zinc-100 font-bold text-sm tracking-tight">{tech.name}</span>
             </motion.div>
           ))}
         </div>
