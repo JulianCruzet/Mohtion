@@ -243,3 +243,61 @@ Railway Project
 - Test end-to-end webhook reception and job processing
 - Monitor production usage and costs
 - Implement database persistence (TODO Phase 10)
+
+---
+
+## 2025-12-31 - Session 5: Railway Deployment Success
+
+### Accomplished
+- **Successfully deployed Mohtion to Railway** - All services running in production!
+- Fixed critical Railway deployment issues:
+  - Fixed PORT environment variable expansion in `railway.toml` (wrapped in `sh -c`)
+  - Fixed Dockerfile build order (copy `mohtion/` before `pip install`)
+  - Removed `README.md` from `.dockerignore` to fix build errors
+- Configured environment variables in Railway Dashboard:
+  - GitHub App credentials (App ID, private key, webhook secret)
+  - Anthropic API key
+  - Agent configuration settings
+- Verified deployment health:
+  - ✅ Web service running on Railway with public URL
+  - ✅ Health check endpoint passing: `GET /health` returns 200 OK
+  - ✅ Server logs showing successful startup
+  - ✅ Uvicorn running on `http://0.0.0.0:8080`
+
+### Deployment Logs (Success)
+```
+Starting Container
+INFO:     Started server process [2]
+INFO:     Waiting for application startup.
+INFO:mohtion.web.app:Mohtion starting up...
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)
+INFO:     100.64.0.2:56761 - "GET /health HTTP/1.1" 200 OK
+```
+
+### Production Status: ✅ **LIVE AND RUNNING**
+
+**Services deployed**:
+- ✅ **Web Service** - FastAPI application with public Railway URL
+- ✅ **Health Checks** - Passing (Railway monitoring via `/health`)
+- ✅ **Redis** - Managed plugin configured with auto REDIS_URL
+- ⏳ **Worker Service** - Deployed (requires verification)
+
+**Available Endpoints**:
+- `GET /` - Welcome message and version info
+- `GET /health` - Health check (monitored by Railway)
+- `POST /webhooks/github` - GitHub webhook receiver
+- `GET /docs` - Interactive Swagger API documentation
+- `GET /redoc` - ReDoc API documentation
+
+### Key Technical Fixes
+1. `railway.toml:6` - Wrapped start command in shell for PORT expansion
+2. `Dockerfile:13` - Reordered to copy source code before pip install
+3. `.dockerignore` - Removed README.md to satisfy pyproject.toml requirements
+
+### Next Steps
+- Get Railway public URL and test all endpoints
+- Configure GitHub App webhook URL to point to Railway
+- Test webhook reception and job queue processing
+- Monitor first production agent execution via webhooks
+- Consider adding database persistence for bounty tracking
