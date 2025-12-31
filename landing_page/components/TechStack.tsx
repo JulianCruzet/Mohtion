@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 export function TechStack() {
   const techs = [
@@ -19,12 +20,19 @@ export function TechStack() {
         </p>
         <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 transition-all duration-700">
           {techs.map((tech) => (
-            <motion.div 
-              key={tech.name} 
+            <motion.div
+              key={tech.name}
               className="flex items-center gap-2"
               whileHover={{ y: -2 }}
             >
-              <img src={tech.logo} alt={tech.name} className="h-6 w-auto object-contain" />
+              <Image
+                src={tech.logo}
+                alt={tech.name}
+                width={24}
+                height={24}
+                className="h-6 w-auto object-contain"
+                unoptimized
+              />
               <span className="text-zinc-100 font-bold text-sm tracking-tight">{tech.name}</span>
             </motion.div>
           ))}

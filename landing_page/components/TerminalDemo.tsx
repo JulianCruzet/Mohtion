@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Terminal, Check, X, GitPullRequest, Search, Zap } from "lucide-react";
+import { Terminal, Check, GitPullRequest, Search, Zap } from "lucide-react";
 import clsx from "clsx";
 
 const LOGS = [

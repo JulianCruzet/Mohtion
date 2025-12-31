@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Search, Terminal, GitPullRequest, CheckCircle2, AlertCircle, FileDiff, Layers, Bot, Code } from "lucide-react";
+import { Search, GitPullRequest, CheckCircle2, AlertCircle, FileDiff, Layers, Bot } from "lucide-react";
 
 // --- Visual Components for each card ---
 
@@ -31,9 +31,9 @@ const ScannerVisual = () => (
 
 const RefactorVisual = () => (
     <div className="w-full h-28 bg-zinc-900 rounded-lg border border-zinc-800 p-2 font-mono text-[9px] space-y-0.5">
-        <div className="text-red-400/50 line-through">- return x*y+z &gt; 10 ? "a" : "b"</div>
+        <div className="text-red-400/50 line-through">- return x*y+z &gt; 10 ? &quot;a&quot; : &quot;b&quot;</div>
         <div className="text-green-400">+ const is_over_threshold = (x*y*z) &gt; 10;</div>
-        <div className="text-green-400">+ return is_over_threshold ? "a" : "b";</div>
+        <div className="text-green-400">+ return is_over_threshold ? &quot;a&quot; : &quot;b&quot;;</div>
   </div>
 );
 
@@ -113,7 +113,7 @@ export function CommandCenter() {
         </div>
 
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 relative"> {/* Changed to md:grid-cols-2 */}
-            {STEPS.map((step, i) => (
+            {STEPS.map((step) => (
                 <div key={step.id} className={cn(
                     "p-4 rounded-2xl bg-white border-2 transition-all duration-500 flex flex-col gap-3",
                     activeStep === step.id ? "border-orange-500 shadow-xl shadow-orange-500/10" : "border-zinc-200 opacity-70"

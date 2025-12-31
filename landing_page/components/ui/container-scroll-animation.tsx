@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef } from "react";
-import { useScroll, useTransform, motion } from "framer-motion";
+import { useScroll, useTransform, motion, MotionValue } from "framer-motion";
 
 export const ContainerScroll = ({
   titleComponent,
@@ -9,7 +9,7 @@ export const ContainerScroll = ({
   titleComponent: string | React.ReactNode;
   children: React.ReactNode;
 }) => {
-  const containerRef = useRef<any>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
   });
@@ -54,7 +54,10 @@ export const ContainerScroll = ({
     );
   };
   
-  export const Header = ({ translate, titleComponent }: any) => {
+  export const Header = ({ translate, titleComponent }: {
+    translate: MotionValue<number>;
+    titleComponent: string | React.ReactNode;
+  }) => {
     return (
       <motion.div
         style={{
@@ -72,9 +75,9 @@ export const ContainerScroll = ({
     scale,
     children,
   }: {
-    rotate: any;
-    scale: any;
-    translate: any;
+    rotate: MotionValue<number>;
+    scale: MotionValue<number>;
+    translate: MotionValue<number>;
     children: React.ReactNode;
   }) => {
     return (

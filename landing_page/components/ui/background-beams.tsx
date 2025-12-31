@@ -1,8 +1,8 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
- 
+
 export const BackgroundBeams = React.memo(
   ({ className }: { className?: string }) => {
     const paths = [
@@ -57,6 +57,17 @@ export const BackgroundBeams = React.memo(
       "M-44 -573C-44 -573 24 -168 488 -41C952 86 1020 491 1020 491",
       "M-37 -581C-37 -581 31 -176 495 -49C959 78 1027 483 1027 483",
     ];
+
+    // Generate random values once for each path to maintain React purity
+    // Using useState with lazy initializer to avoid calling Math.random during render
+    const [randomValues] = useState(() =>
+      paths.map(() => ({
+        y2: 93 + Math.random() * 8,
+        duration: Math.random() * 10 + 10,
+        delay: Math.random() * 10,
+      }))
+    );
+
     return (
       <div
         className={cn(
@@ -103,13 +114,13 @@ export const BackgroundBeams = React.memo(
                   x1: ["0%", "100%"],
                   x2: ["0%", "95%"],
                   y1: ["0%", "100%"],
-                  y2: ["0%", `${93 + Math.random() * 8}%`],
+                  y2: ["0%", `${randomValues[index].y2}%`],
                 }}
                 transition={{
-                  duration: Math.random() * 10 + 10,
+                  duration: randomValues[index].duration,
                   ease: "easeInOut",
                   repeat: Infinity,
-                  delay: Math.random() * 10,
+                  delay: randomValues[index].delay,
                 }}
               >
                 <stop stopColor="#18CCFC" stopOpacity="0"></stop>

@@ -1,18 +1,8 @@
 "use client";
-import React, { useEffect, useRef } from "react";
-import { motion, useAnimation } from "framer-motion";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Code, GitMerge, Search, ShieldCheck, Cpu } from "lucide-react";
-
-// Types
-type NodeProps = {
-  icon: React.ReactNode;
-  title: string;
-  status: string;
-  color: string;
-  className?: string;
-  delay?: number;
-};
 
 // Data
 const NODES = [
@@ -91,32 +81,41 @@ const SatelliteNode = ({ node }: { node: typeof NODES[0] }) => {
   );
 };
 
-const ConnectionBeam = ({ angle }: { angle: number }) => {
+const ConnectionBeam = ({ angle, delay }: { angle: number; delay: number }) => {
   return (
-    <div 
+    <div
         className="absolute top-1/2 left-1/2 w-[200px] h-[2px] origin-left bg-zinc-200"
         style={{ transform: `rotate(${angle}deg)` }}
     >
-        <motion.div 
+        <motion.div
             className="absolute top-0 left-0 w-12 h-full bg-gradient-to-r from-transparent via-orange-500 to-transparent"
             animate={{ left: ["0%", "100%"], opacity: [0, 1, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: Math.random() }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear", delay }}
         />
     </div>
   );
 };
 
 export function NeuralLifecycle() {
+  // Generate random delays once for each beam to maintain React purity
+  // Using useState with lazy initializer to avoid calling Math.random during render
+  const [beamDelays] = useState(() => [
+    Math.random(),
+    Math.random(),
+    Math.random(),
+    Math.random(),
+  ]);
+
   return (
     <section className="py-40 bg-zinc-50 overflow-hidden relative min-h-[800px] flex items-center justify-center">
-      
+
       {/* Background Grid */}
       <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:20px_20px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)] opacity-50" />
 
       <div className="relative w-[100px] h-[100px] flex items-center justify-center">
-        
+
         {/* Core Node */}
-        <motion.div 
+        <motion.div
             className="relative z-20 w-24 h-24 bg-white rounded-full border-2 border-zinc-200 shadow-2xl flex items-center justify-center"
             animate={{ boxShadow: ["0 0 20px rgba(0,0,0,0.05)", "0 0 40px rgba(249,115,22,0.2)", "0 0 20px rgba(0,0,0,0.05)"] }}
             transition={{ duration: 3, repeat: Infinity }}
@@ -126,10 +125,10 @@ export function NeuralLifecycle() {
         </motion.div>
 
         {/* Beams */}
-        <ConnectionBeam angle={-90} /> {/* Top */}
-        <ConnectionBeam angle={0} />   {/* Right */}
-        <ConnectionBeam angle={90} />  {/* Bottom */}
-        <ConnectionBeam angle={180} /> {/* Left */}
+        <ConnectionBeam angle={-90} delay={beamDelays[0]} /> {/* Top */}
+        <ConnectionBeam angle={0} delay={beamDelays[1]} />   {/* Right */}
+        <ConnectionBeam angle={90} delay={beamDelays[2]} />  {/* Bottom */}
+        <ConnectionBeam angle={180} delay={beamDelays[3]} /> {/* Left */}
 
         {/* Satellites */}
         {NODES.map((node) => (
