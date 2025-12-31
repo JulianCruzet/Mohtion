@@ -23,5 +23,4 @@ debug_*.py
 get_installation_id.py
 encode_key.py
 docker-compose.yml
-README.md
 .claude/
