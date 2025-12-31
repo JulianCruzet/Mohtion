@@ -1,0 +1,21 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 
+    Mohtion Logo
+    Based on Navbar.tsx:
+    Outer: bg-zinc-900 (#18181b), rounded-lg
+    Inner: bg-orange-500 (#f97316), rounded-sm, rotate-45
+  -->
+  
+  <!-- Outer Container (Zinc-900) -->
+  <rect width="512" height="512" rx="128" fill="#18181b"/>
+  
+  <!-- Inner Diamond (Orange-500) -->
+  <!-- 
+       Size is 50% of outer (256px).
+       Centered at 256,256.
+       Rotated 45 degrees.
+  -->
+  <g transform="rotate(45 256 256)">
+    <rect x="128" y="128" width="256" height="256" rx="32" fill="#f97316"/>
+  </g>
+</svg>

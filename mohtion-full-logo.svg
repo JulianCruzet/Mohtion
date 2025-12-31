@@ -1,0 +1,38 @@
+<svg width="2000" height="512" viewBox="0 0 2000 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- 
+    Mohtion Full Logo
+    Icon + Text
+    
+    Icon: 512x512
+    Gap: ~128px (proportional to gap-2 vs w-8)
+    Text: "Mohtion"
+  -->
+  
+  <!-- Icon Section -->
+  <g id="icon">
+    <!-- Outer Container (Zinc-900) -->
+    <rect width="512" height="512" rx="128" fill="#18181b"/>
+    
+    <!-- Inner Diamond (Orange-500) -->
+    <g transform="rotate(45 256 256)">
+      <rect x="128" y="128" width="256" height="256" rx="32" fill="#f97316"/>
+    </g>
+  </g>
+
+  <!-- Text Section -->
+  <!-- 
+     Font: Inter/System Sans
+     Weight: Bold (700)
+     Tracking: Tighter (-0.05em)
+     Color: Zinc-900 (#18181b)
+     Vertical alignment: Centered (y=~360 for baseline roughly, strictly centered visually)
+  -->
+  <text x="640" y="365" 
+        fill="#18181b" 
+        font-family="'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif" 
+        font-weight="bold" 
+        font-size="360" 
+        letter-spacing="-15">
+    Mohtion
+  </text>
+</svg>
