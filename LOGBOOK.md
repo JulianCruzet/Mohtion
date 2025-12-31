@@ -48,3 +48,22 @@ The final result is a professional, animated, and highly informative landing pag
 ### Next Steps
 - **Production Deployment:** The landing page is now polished enough for a public reveal.
 - **Backend Persistence:** Return to the core backend tasks: setting up PostgreSQL and Alembic migrations.
+
+---
+
+## 2025-12-31 - Session 6: Landing Page Module Resolution Fix
+
+### Accomplished
+- **Issue:** Landing page failed to start with module resolution error: `Module not found: Can't resolve '@/lib/utils'`
+- **Root Cause:** The `landing_page/lib/utils.ts` file was missing entirely, and multiple components were importing the `cn` utility function from it
+- **Fix Applied:**
+  - Created `landing_page/lib/utils.ts` with the standard `cn` (className) utility that merges Tailwind CSS classes using `clsx` and `tailwind-merge`
+  - Updated `.gitignore` to allow `landing_page/lib/` to be tracked (was being ignored by Python's `lib/` pattern)
+
+### Technical Details
+- **Affected Components:** `CommandCenter.tsx`, `background-beams.tsx`, `glowing-card.tsx`, `NeuralLifecycle.tsx`, `tracing-beam.tsx`
+- **Dependencies Used:** Both `clsx` (^2.1.1) and `tailwind-merge` (^3.4.0) were already installed
+- **Branch:** `feature/marketing-landing-page`
+
+### Status
+Landing page now starts successfully with `npm run dev` and all component imports resolve correctly.
