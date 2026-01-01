@@ -1,8 +1,30 @@
+# ============================================
+# Stage 1: Build Next.js Landing Page
+# ============================================
+FROM node:20-slim AS frontend-builder
+
+WORKDIR /frontend
+
+# Copy package files
+COPY landing_page/package*.json ./
+
+# Install dependencies
+RUN npm ci --only=production
+
+# Copy landing page source
+COPY landing_page/ ./
+
+# Build static export
+RUN npm run build
+
+# ============================================
+# Stage 2: Python Backend + Static Files
+# ============================================
 FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install git (needed for GitPython)
+# Install git (required for GitPython)
 RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
 # Copy dependency files first
@@ -14,6 +36,9 @@ COPY mohtion/ mohtion/
 
 # Install dependencies (package source now available)
 RUN pip install --no-cache-dir -e .
+
+# Copy static files from frontend build
+COPY --from=frontend-builder /frontend/out /app/static
 
 # Expose port for documentation
 EXPOSE 8000

@@ -2,9 +2,11 @@
 
 import logging
 from contextlib import asynccontextmanager
+from pathlib import Path
 from typing import AsyncGenerator
 
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from mohtion.config import get_settings
 from mohtion.web.routes import health, webhooks
@@ -37,6 +39,11 @@ def create_app() -> FastAPI:
     # Register routes
     app.include_router(health.router, tags=["health"])
     app.include_router(webhooks.router, prefix="/webhooks", tags=["webhooks"])
+
+    # Mount static files for landing page (must be LAST, acts as catch-all)
+    static_dir = Path(__file__).parent.parent.parent / "static"
+    if static_dir.exists():
+        app.mount("/", StaticFiles(directory=str(static_dir), html=True), name="static")
 
     return app
 
