@@ -8,8 +8,8 @@ WORKDIR /frontend
 # Copy package files
 COPY landing_page/package*.json ./
 
-# Install dependencies
-RUN npm ci --only=production
+# Install dependencies (includes devDependencies for TypeScript)
+RUN npm ci
 
 # Copy landing page source
 COPY landing_page/ ./
