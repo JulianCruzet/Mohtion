@@ -14,6 +14,38 @@ from mohtion.models.target import DebtType, TechDebtTarget
 logger = logging.getLogger(__name__)
 
 
+class VariableNormalizer(ast.NodeTransformer):
+    """
+    Normalizes variable names in an AST to generic placeholders. 
+    
+    Converts:
+        def add(a, b): return a + b
+    To:
+        def arg_0(var_0, var_1): return var_0 + var_1
+    """
+    
+    def __init__(self):
+        self.mapping = {}
+        self.counter = 0
+
+    def _get_name(self, original_name: str) -> str:
+        if original_name not in self.mapping:
+            self.mapping[original_name] = f"var_{self.counter}"
+            self.counter += 1
+        return self.mapping[original_name]
+
+    def visit_arg(self, node: ast.arg) -> ast.arg:
+        # Normalize argument names
+        node.arg = self._get_name(node.arg)
+        return node
+
+    def visit_Name(self, node: ast.Name) -> ast.Name:
+        # Normalize variable usage
+        if isinstance(node.ctx, (ast.Load, ast.Store)):
+             node.id = self._get_name(node.id)
+        return node
+
+
 class DuplicateVisitor(ast.NodeVisitor):
     """AST visitor that finds duplicate function bodies."""
 
@@ -43,11 +75,13 @@ class DuplicateVisitor(ast.NodeVisitor):
         if not node.body:
             return
 
-        # Create a dummy module to hold the body so we can unparse it consistently
-        # This handles indentation normalization automatically
-        body_node = ast.Module(body=node.body, type_ignores=[])
+        # Create a dummy module to hold the body for normalization
+        # We use a copy of the body nodes to avoid modifying the original tree
+        import copy
+        body_nodes = copy.deepcopy(node.body)
+        body_node = ast.Module(body=body_nodes, type_ignores=[])
 
-        # Remove docstring if present (it's the first statement if it's a string constant)
+        # Remove docstring if present
         if (
             len(body_node.body) > 0
             and isinstance(body_node.body[0], ast.Expr)
@@ -56,11 +90,21 @@ class DuplicateVisitor(ast.NodeVisitor):
         ):
             body_node.body = body_node.body[1:]
 
+        # Normalize variables for structural comparison
+        normalizer = VariableNormalizer()
+        
+        # Pre-seed normalizer with arguments so they are mapped consistently (var_0, var_1...)
+        # We don't modify the function arguments themselves here, just update the mapping
+        for arg in node.args.args:
+             normalizer._get_name(arg.arg)
+        
+        normalized_tree = normalizer.visit(body_node)
+
         try:
             # unparse() produces canonical code representation
-            normalized_code = ast.unparse(body_node).strip()
+            normalized_code = ast.unparse(normalized_tree).strip()
         except Exception:
-            # Fallback for complex ASTs that might fail unparse
+            # Fallback for complex ASTs
             return
 
         # Skip trivial functions (empty, pass, or too short)
@@ -68,7 +112,6 @@ class DuplicateVisitor(ast.NodeVisitor):
             return
         
         # Heuristic: Skip functions with fewer than 3 lines of logic
-        # (reduces noise from simple getters/setters/wrappers)
         if len(normalized_code.splitlines()) < 3:
             return
 
@@ -80,8 +123,9 @@ class DuplicateVisitor(ast.NodeVisitor):
             "start_line": node.lineno,
             "end_line": node.end_lineno or node.lineno,
             "hash": code_hash,
-            "code": normalized_code,
-            "node": node
+            # Production Optimization: Don't store full 'normalized_code' string in memory
+            # The hash is enough for detection.
+            "line_count": len(normalized_code.splitlines())
         })
 
 
@@ -94,7 +138,6 @@ class DuplicateAnalyzer(Analyzer):
 
     async def analyze_file(self, file_path: Path, content: str) -> list[TechDebtTarget]:
         """Analyze a Python file for duplicate code."""
-        # Only analyze Python files
         if file_path.suffix != ".py":
             return []
 
@@ -121,41 +164,26 @@ class DuplicateAnalyzer(Analyzer):
         for code_hash, group in hash_groups.items():
             if len(group) > 1:
                 # Found duplicates!
-                # We create a target for each instance, referencing the others
-                
-                # Sort group by line number
                 group.sort(key=lambda x: x["start_line"])
                 
                 for i, block in enumerate(group):
-                    # Find the "original" (first occurrence) to reference
-                    original = group[0]
-                    is_original = (i == 0)
-                    
-                    # If it's the original, we might still want to flag it if there are copies
-                    # But usually we want to flag the COPIES to be removed/refactored.
-                    # Actually, refactoring strategy is "Extract Method".
-                    # So we should flag ALL of them so the agent sees the full picture.
-                    
                     other_locations = [
                         f"{b['name']} (line {b['start_line']})" 
                         for j, b in enumerate(group) if i != j
                     ]
                     
                     description = (
-                        f"Duplicate code logic found. "
-                        f"Identical to {', '.join(other_locations)}."
+                        f"Structural duplication found. "
+                        f"Logic matches {', '.join(other_locations)}."
                     )
                     
-                    # Extract code
+                    # Extract original code for the snippet
                     start = block["start_line"] - 1
                     end = block["end_line"]
                     code_snippet = "\n".join(lines[start:end])
                     
                     # Severity calculation
-                    # Longer duplicates = higher severity
-                    # More copies = higher severity
-                    lines_of_code = len(block["code"].splitlines())
-                    base_severity = min(1.0, lines_of_code / 20) # 20 lines = 1.0
+                    base_severity = min(1.0, block["line_count"] / 20)
                     multiplier = 1.0 + (0.1 * (len(group) - 1))
                     severity = min(1.0, base_severity * multiplier)
 
@@ -169,7 +197,7 @@ class DuplicateAnalyzer(Analyzer):
                         code_snippet=code_snippet,
                         function_name=block["name"],
                         class_name=block["class_name"],
-                        metric_value=float(len(group)), # Metric = count of duplicates
+                        metric_value=float(len(group)),
                     )
                     targets.append(target)
 

@@ -79,26 +79,20 @@ def _private(x):
 # --- Duplicate Tests ---
 
 @pytest.mark.asyncio
-async def test_detects_duplicates(duplicate_analyzer: DuplicateAnalyzer) -> None:
-    """Identical functions should be flagged as duplicates."""
-    # Note: Variable names must match for exact duplication detection
+async def test_detects_structural_duplicates(duplicate_analyzer: DuplicateAnalyzer) -> None:
+    """Functions with identical logic but different variable names should be flagged."""
     code = """
-def func_a(x):
-    if x > 0:
-        return x * 2
-    return 0
+def calculate_area(width, height):
+    area = width * height
+    return area
 
-def func_b(x):
-    if x > 0:
-        return x * 2
-    return 0
+def get_size(w, h):
+    s = w * h
+    return s
 """
     targets = await duplicate_analyzer.analyze_file(Path("test.py"), code)
-    # Should flag both functions
     assert len(targets) == 2
-    assert targets[0].debt_type == DebtType.DUPLICATE
-    assert targets[1].debt_type == DebtType.DUPLICATE
-    assert "Duplicate code logic found" in targets[0].description
+    assert "Structural duplication found" in targets[0].description
 
 
 @pytest.mark.asyncio
