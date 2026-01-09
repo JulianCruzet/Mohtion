@@ -8,7 +8,6 @@ from pathlib import Path
 from typing import Any
 
 from mohtion.analyzers.base import Analyzer
-from mohtion.models.repo_config import RepoConfig
 from mohtion.models.target import DebtType, TechDebtTarget
 
 logger = logging.getLogger(__name__)
@@ -23,7 +22,7 @@ class VariableNormalizer(ast.NodeTransformer):
     To:
         def arg_0(var_0, var_1): return var_0 + var_1
     """
-    
+
     def __init__(self):
         self.mapping = {}
         self.counter = 0
@@ -92,12 +91,12 @@ class DuplicateVisitor(ast.NodeVisitor):
 
         # Normalize variables for structural comparison
         normalizer = VariableNormalizer()
-        
+
         # Pre-seed normalizer with arguments so they are mapped consistently (var_0, var_1...)
         # We don't modify the function arguments themselves here, just update the mapping
         for arg in node.args.args:
              normalizer._get_name(arg.arg)
-        
+
         normalized_tree = normalizer.visit(body_node)
 
         try:
@@ -110,7 +109,7 @@ class DuplicateVisitor(ast.NodeVisitor):
         # Skip trivial functions (empty, pass, or too short)
         if not normalized_code or normalized_code == "pass":
             return
-        
+
         # Heuristic: Skip functions with fewer than 3 lines of logic
         if len(normalized_code.splitlines()) < 3:
             return
@@ -165,23 +164,23 @@ class DuplicateAnalyzer(Analyzer):
             if len(group) > 1:
                 # Found duplicates!
                 group.sort(key=lambda x: x["start_line"])
-                
+
                 for i, block in enumerate(group):
                     other_locations = [
-                        f"{b['name']} (line {b['start_line']})" 
+                        f"{b['name']} (line {b['start_line']})"
                         for j, b in enumerate(group) if i != j
                     ]
-                    
+
                     description = (
                         f"Structural duplication found. "
                         f"Logic matches {', '.join(other_locations)}."
                     )
-                    
+
                     # Extract original code for the snippet
                     start = block["start_line"] - 1
                     end = block["end_line"]
                     code_snippet = "\n".join(lines[start:end])
-                    
+
                     # Severity calculation
                     base_severity = min(1.0, block["line_count"] / 20)
                     multiplier = 1.0 + (0.1 * (len(group) - 1))
